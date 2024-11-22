@@ -7,3 +7,4 @@ navbar:
 output:
   html_document:
     theme: cosmo
+output_dir: "."
