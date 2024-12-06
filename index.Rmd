@@ -7,4 +7,308 @@ output:
         toc_float: TRUE
 ---
 
-This is my PM566 Final Project website.
+# Description
+
+This project examines the trends in COVID-19 positivity rates and death rates in California and Ohio during 2020, prior to the widespread availability of vaccines. The analysis examines how differing government interventions, such as mask mandates and reopening policies, may have influenced public health outcomes including positivity rates and death rates. Data was obtained from the COVID Tracking Project, U.S. Census Bureau, and Oxford COVID-19 Government Response Tracker. This project utilized these databases to provide insights into the effectiveness of each state's pandemic response. The timeline below shows important dates of announcements for policies or mandates with links to articles or websites about them. The graphs show the overall testing rates and death rates which can indicate how the policies may have had effects on these statistics. In the full analysis, Stringency Index and Health Containment Index were used to evaluate how the policies affected the health outcomes.
+
+# Link to Download Report
+
+[Download Written Report](<https://github.com/pcasanas/PM566-final-project/blob/main/Final%20Project.pdf>)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+```{r data acquisition, message=FALSE, warning=FALSE, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(readxl)
+library(tidyr)
+library(zoo)
+
+california_data <- read.csv("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\california-history.csv")
+ohio_data <- read.csv("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\ohio-history.csv")
+national_data <- read.csv("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\national-history.csv")
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+timeseries_data <- read_excel("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\OxCGRT_timeseries_all_v1.xlsx")
+
+timeseries_long <- timeseries_data %>%
+  pivot_longer(
+    cols = matches("^[0-9]{2}[A-Za-z]{3}[0-9]{4}$"),
+    names_to = "Date",
+    values_to = "Value"
+  )
+
+timeseries_long$Date <- as.Date(timeseries_long$Date, format = "%d%b%Y")
+
+stringency_data <- read_excel("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\OxCGRT_timeseries_all_v1.xlsx", sheet = "StringencyIndex")
+containment_data <- read_excel("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\OxCGRT_timeseries_all_v1.xlsx", sheet = "ContainmentHealthIndex")
+
+date_cols_stringency <- grep("^\\d{2}[A-Za-z]{3}\\d{4}$", colnames(stringency_data), value = TRUE)
+date_cols_containment <- grep("^\\d{2}[A-Za-z]{3}\\d{4}$", colnames(containment_data), value = TRUE)
+
+start_date <- "04Mar2020"
+end_date <- "07Mar2021"
+
+stringency_filtered <- stringency_data %>%
+  select(CountryCode, RegionCode, RegionName, all_of(date_cols_stringency[which(date_cols_stringency >= start_date & date_cols_stringency <= end_date)]))
+
+containment_filtered <- containment_data %>%
+  select(CountryCode, RegionCode, RegionName, all_of(date_cols_containment[which(date_cols_containment >= start_date & date_cols_containment <= end_date)]))
+
+stringency_long <- stringency_filtered %>%
+  pivot_longer(
+    cols = all_of(date_cols_stringency[which(date_cols_stringency >= start_date & date_cols_stringency <= end_date)]),
+    names_to = "date",
+    values_to = "StringencyIndex"
+  ) %>%
+  mutate(date = as.Date(date, format = "%d%b%Y"))
+
+containment_long <- containment_filtered %>%
+  pivot_longer(
+    cols = all_of(date_cols_containment[which(date_cols_containment >= start_date & date_cols_containment <= end_date)]),
+    names_to = "date",
+    values_to = "ContainmentHealthIndex"
+  ) %>%
+  mutate(date = as.Date(date, format = "%d%b%Y"))
+
+indices_long <- stringency_long %>%
+  left_join(containment_long, by = c("CountryCode", "RegionCode", "RegionName", "date"), relationship="many-to-many")
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+california_data$positivity_rate <- (california_data$positiveIncrease/california_data$totalTestResultsIncrease) * 100
+
+ohio_data$positivity_rate <- (ohio_data$positiveIncrease / ohio_data$totalTestResultsIncrease) * 100
+
+national_data$positivity_rate <- (national_data$positiveIncrease / national_data$totalTestResultsIncrease) * 100
+
+ohio_population <- 11799448
+california_population <- 39538223
+national_population <- 331449281
+
+california_data$death_rate <- (california_data$death / california_population) * 100000
+
+ohio_data$death_rate <- (ohio_data$death / ohio_population) * 100000
+
+national_data$death_rate <- (national_data$death / national_population) * 100000
+
+```
+
+```{r date adjustment, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+california_data$date <- as.Date(california_data$date)
+ohio_data$date <- as.Date(ohio_data$date)
+national_data$date <- as.Date(national_data$date)
+
+range(california_data$date, na.rm = TRUE)
+range(ohio_data$date, na.rm = TRUE)
+range(national_data$date, na.rm = TRUE)
+```
+
+```{r missing values, echo=FALSE, message=FALSE, warning=FALSE}
+california_filtered <- california_data %>%
+  filter(!is.na(date) & !is.na(positivity_rate))
+
+ohio_filtered <- ohio_data %>%
+  filter(!is.na(date) & !is.na(positivity_rate) & totalTestResultsIncrease > 0) %>%
+  mutate(positiveIncrease = ifelse(positiveIncrease > totalTestResultsIncrease, totalTestResultsIncrease, positiveIncrease)) %>%
+  mutate(positivity_rate = (positiveIncrease / totalTestResultsIncrease) * 100) %>%
+  filter(positivity_rate <= 100)
+
+national_filtered <- national_data %>%
+  filter(!is.na(date) & !is.na(positivity_rate) & totalTestResultsIncrease > 0) %>%
+  mutate(positiveIncrease = ifelse(positiveIncrease > totalTestResultsIncrease, totalTestResultsIncrease, positiveIncrease)) %>%
+  mutate(positivity_rate = (positiveIncrease / totalTestResultsIncrease) * 100) %>%
+  filter(positivity_rate <= 100)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+start_date <- as.Date("2020-03-04")
+end_date <- as.Date("2021-03-07")
+
+national_filtered <- national_filtered %>%
+  filter(date >= start_date & date <= end_date)
+
+california_filtered <- california_filtered %>%
+  filter(date >= start_date & date <= end_date)
+
+ohio_filtered <- ohio_filtered %>%
+  filter(date >= start_date & date <= end_date)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+timeseries_filtered <- timeseries_long %>%
+  filter(RegionName %in% c("California", "Ohio", "United States"))
+
+timeseries_filtered$date <- as.Date(timeseries_filtered$Date)
+
+ohio_combined <- ohio_filtered %>%
+  left_join(indices_long %>% filter(RegionName == "Ohio"), by = "date")
+
+california_combined <- california_filtered %>%
+  left_join(indices_long %>% filter(RegionName == "California"), by = "date")
+
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+california_combined$StringencyIndex <- na.approx(california_combined$StringencyIndex, na.rm = FALSE)
+california_combined$ContainmentHealthIndex <- na.approx(california_combined$ContainmentHealthIndex, na.rm = FALSE)
+
+ohio_combined <- ohio_combined %>%
+  mutate(
+    StringencyIndex = zoo::na.approx(StringencyIndex, na.rm = FALSE),
+    ContainmentHealthIndex = zoo::na.approx(ContainmentHealthIndex, na.rm = FALSE)
+  )
+```
+
+# Figure 1: Timeline of Key COVID-19 Policies in California and Ohio (March - November 2020)
+
+```{r, echo=FALSE, message=FALSE}
+library(timevis)
+
+timeline_data <- data.frame(
+  id = 1:10,
+  content = c(
+    "<a href='https://www.gov.ca.gov/2020/03/19/governor-gavin-newsom-issues-stay-at-home-order/' target='_blank' style='color:blue;'>March 19: CA Stay-at-Home Order</a>",
+    "<a href='https://www.nbcnews.com/news/us-news/california-issues-statewide-stay-home-order-coronavirus-fight-n1164471' target='_blank' style='color:red;'>March 23: OH Stay-at-Home Order</a>",
+    "<a href='https://www.cdph.ca.gov/Programs/OPA/Pages/NR20-158.aspx' target='_blank' style='color:blue;'>May 7: CA Stage 2 Reopening</a>",
+    "<a href='https://coronavirus.ohio.gov/static/responsible/Responsible-Reopening-Retail.pdf' target='_blank' style='color:red;'>May 20: OH Retail Reopens</a>",
+    "<a href='https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/Immunization/ncov2019.aspx' target='_blank' style='color:blue;'>June 18: CA Mask Mandate</a>",
+    "<a href='https://www.10tv.com/article/news/health/coronavirus/how-did-we-get-here-look-back-at-ohios-mask-mandates/530-651a610b-2106-49a2-930a-d0c57f095341' target='_blank' style='color:red;'>July 8: OH County Mask Mandate</a>",
+    "<a href='https://www.cdph.ca.gov/Programs/OPA/Pages/NR20-158.aspx' target='_blank' style='color:blue;'>July 13: CA Indoor Closures</a>",
+    "<a href='https://governor.ohio.gov/media/news-and-media/covid19-update-07222020' target='_blank' style='color:red;'>July 23: OH Statewide Mask Mandate</a>",
+    "<a href='https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/Regional-Stay-Home-Order.aspx' target='_blank' style='color:blue;'>November 19: CA Curfew</a>",
+    "<a href='https://coronavirus.ohio.gov/static/responsible/Restaurants-and-Bars.pdf' target='_blank' style='color:red;'>May 21: OH Reopens Indoor Dining</a>"
+  ),
+  start = c(
+    "2020-03-19", "2020-03-23", "2020-05-07", "2020-05-20", 
+    "2020-06-18", "2020-07-08", "2020-07-13", "2020-07-23", 
+    "2020-11-19", "2020-05-21"
+  )
+)
+
+timevis(
+  timeline_data,
+  options = list(
+    orientation = list(axis = "top", item = "bottom"),
+    zoomable = TRUE
+  )
+)
+
+
+
+```
+
+**Figure 1 Analysis:** This figure shows a timeline of various policies and recommendations made in both Ohio and California. Each leads to a link for an article or website for further details. California seems to precede Ohio when making orders or making recommendations prior to full reopenings.
+
+# Figure 2: Weekly Testing Rates in California and Ohio from March 2020-April 2021
+
+```{r, echo=FALSE}
+library(dplyr)
+library(lubridate)
+library(plotly)
+
+california_data$Date <- as.Date(california_data$date)
+ohio_data$Date <- as.Date(ohio_data$date)
+
+california_weekly_tests <- california_data %>%
+  mutate(Week = floor_date(Date, "week")) %>%
+  group_by(Week) %>%
+  summarise(TotalTests = sum(totalTestResultsIncrease, na.rm = TRUE)) %>%
+  mutate(State = "California")
+
+ohio_weekly_tests <- ohio_data %>%
+  mutate(Week = floor_date(Date, "week")) %>%
+  group_by(Week) %>%
+  summarise(TotalTests = sum(totalTestResultsIncrease, na.rm = TRUE)) %>%
+  mutate(State = "Ohio")
+
+weekly_tests <- bind_rows(california_weekly_tests, ohio_weekly_tests)
+
+fig <- plot_ly(
+  data = weekly_tests,
+  x = ~Week,
+  y = ~TotalTests,
+  color = ~State,
+  type = 'scatter',
+  mode = 'none',
+  fill = 'tozeroy',
+  text = ~paste("Week:", format(Week, "%B %d, %Y"),
+                "<br>State:", State,
+                "<br>Total Tests:", TotalTests),
+  hoverinfo = "text"
+) %>%
+  layout(
+    title = "Weekly Testing Rates in California and Ohio",
+    xaxis = list(title = "Week"),
+    yaxis = list(title = "Number of Tests"),
+    showlegend = TRUE
+  )
+
+fig
+
+
+```
+
+**Figure 2 Analysis:** This figure reveals the amount of weekly COVID-19 tests in both California and Ohio. California overall had more testing and seemed to increase their testing during the winter surge in 2020 and early 2021 whereas Ohio did not see as drastic of a spike.
+
+# Figure 3: Weekly Death Rates in California and Ohio from March 2020 - April 2021
+
+```{r, echo=FALSE}
+library(dplyr)
+library(lubridate)
+library(plotly)
+
+california_population <- 39538223
+ohio_population <- 11799448
+
+california_data$Date <- as.Date(california_data$date)
+ohio_data$Date <- as.Date(ohio_data$date)
+
+california_weekly_deaths <- california_data %>%
+  mutate(Week = floor_date(Date, "week")) %>%
+  group_by(Week) %>%
+  summarise(DeathRate = sum(deathIncrease, na.rm = TRUE) / california_population * 100000) %>%
+  mutate(State = "California")
+
+ohio_weekly_deaths <- ohio_data %>%
+  mutate(Week = floor_date(Date, "week")) %>%
+  group_by(Week) %>%
+  summarise(DeathRate = sum(deathIncrease, na.rm = TRUE) / ohio_population * 100000) %>%
+  mutate(State = "Ohio")
+
+weekly_deaths <- bind_rows(california_weekly_deaths, ohio_weekly_deaths)
+
+death_rate_fig <- plot_ly(
+  data = weekly_deaths,
+  x = ~Week,
+  y = ~DeathRate,
+  color = ~State,
+  type = 'scatter',
+  mode = 'lines+markers',
+  text = ~paste("Week:", format(Week, "%B %d, %Y"),
+                "<br>State:", State,
+                "<br>Death Rate:", round(DeathRate, 2), "per 100,000"),
+  hoverinfo = "text"
+) %>%
+  layout(
+    title = "Weekly COVID-19 Death Rates in California and Ohio (per 100,000)",
+    xaxis = list(title = "Week"),
+    yaxis = list(title = "Death Rate (per 100,000)"),
+    showlegend = TRUE
+  )
+
+death_rate_fig
+
+
+```
+
+**Figure 3 Analysis**: This figure shows the death rates in both California and Ohio from March 2020 to April 2021. Ohio at the beginning of the pandemic had a higher death rate, but California was higher during the summer months. The winter surge had an overall higher rate in California likely due to noncompliance of social gatherings during the holidays and greater population density. The early increase of deaths is likely reflective of early lockdown measures and reopening policies.
