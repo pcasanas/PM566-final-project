@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Patrick Casanas" />
+
+<meta name="date" content="2024-12-06" />
+
+<title>Final Written Report</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">PM566 Final Project</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Final Written Report</h1>
+<h4 class="author">Patrick Casanas</h4>
+<h4 class="date">2024-12-06</h4>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The COVID-19 pandemic has had lingering consequences since 2020. Key
+to the combat against this pandemic was the rollout of vaccines which
+had early access for healthcare workers in December 2020 but later
+became available to the general public in April 2021 (Center for Disease
+Control 2021). Prior to the vaccines, management was key in preventing
+the spread of COVID and varied from state to state. California and Ohio
+were chosen for this analysis because they represent contrasting
+approaches to pandemic management. California, with its large population
+(~39.5 million residents) and stringent measures, provides an example of
+an aggressive mitigation strategy. Contrarily, Ohio’s moderate, reactive
+approach offers insight into a more flexible response. This comparison
+highlights how different strategies influenced pandemic outcomes.</p>
+<p>This analysis aims to determine the difference in COVID-19 test
+positivity rates and death rates between Ohio and California during 2020
+until the point when vaccines were distributed which was approximately
+April 2021. By comparing these states’ trends with the national average,
+this analysis seeks to understand how both states managed the pandemic
+before the vaccines were made available and whether their approaches led
+to different outcomes.</p>
+<p><strong>Research Question</strong></p>
+<p>How did Ohio and California compare in their COVID-19 positive test
+rates and death rates prior to the widespread availability of vaccines,
+and how do these trends compare with national averages? To what extent
+did government intervention levels influence these patterns prior to
+vaccines?</p>
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+<p><strong>Data Acquisition</strong></p>
+<p>The datasets are publicly available on
+“www.covidtracking.com/data/download”. They provide daily updates on
+COVID-19 statistics from all the United States. These variables measured
+include test positivity rates, death counts, hospitalizations, and other
+COVID-related metrics. The data ends March 2021 just prior to when
+vaccines became publicly available in April 2021. For population
+estimates, the US Census Bureau was used for their annual state
+population estimates for 2020 to calculate death rates.</p>
+<p>Data from the Oxford COVID-19 Government Response Tracker (OxCGRT)
+was obtained to provide systematic data on government responses to the
+COVID-19 pandemic. This database includes indicators such as the
+Stringency Index and the Containment Health Index. The Containment
+Health Index is a composite measure, ranging from 0 to 100, that
+reflects the strictness of health-related interventions, such as testing
+policies, contact tracing, and healthcare investment. This measure
+provides a standardized way to compare public health responses across
+states and over time.</p>
+<pre class="r"><code>setwd(&quot;C:/Users/patri/OneDrive/Documents/MPH Sem 3/Health Data Science/PM566-labs/PM566-final-project/&quot;)
+library(dplyr)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(readxl)
+library(tidyr)
+library(zoo)
+
+california_data &lt;- read.csv(&quot;C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\california-history.csv&quot;)
+ohio_data &lt;- read.csv(&quot;C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\ohio-history.csv&quot;)
+national_data &lt;- read.csv(&quot;C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\national-history.csv&quot;)</code></pre>
+<div id="oxcgrt-data-preparation" class="section level4">
+<h4><strong>OxCGRT Data Preparation</strong></h4>
+<p>Stringency Index and Health Containment Index values were extracted
+directly from the OxCGRT dataset, which provides systematic data on
+government responses to the COVID-19 pandemic. For missing values within
+the dataset, linear interpolation was applied to estimate intermediate
+values, ensuring continuity in the time series data.</p>
+<pre class="r"><code>timeseries_data &lt;- read_excel(&quot;C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\OxCGRT_timeseries_all_v1.xlsx&quot;)
+
+timeseries_long &lt;- timeseries_data %&gt;%
+  pivot_longer(
+    cols = matches(&quot;^[0-9]{2}[A-Za-z]{3}[0-9]{4}$&quot;),
+    names_to = &quot;Date&quot;,
+    values_to = &quot;Value&quot;
+  )
+
+timeseries_long$Date &lt;- as.Date(timeseries_long$Date, format = &quot;%d%b%Y&quot;)
+
+stringency_data &lt;- read_excel(&quot;C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\OxCGRT_timeseries_all_v1.xlsx&quot;, sheet = &quot;StringencyIndex&quot;)
+containment_data &lt;- read_excel(&quot;C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\OxCGRT_timeseries_all_v1.xlsx&quot;, sheet = &quot;ContainmentHealthIndex&quot;)
+
+date_cols_stringency &lt;- grep(&quot;^\\d{2}[A-Za-z]{3}\\d{4}$&quot;, colnames(stringency_data), value = TRUE)
+date_cols_containment &lt;- grep(&quot;^\\d{2}[A-Za-z]{3}\\d{4}$&quot;, colnames(containment_data), value = TRUE)
+
+start_date &lt;- &quot;04Mar2020&quot;
+end_date &lt;- &quot;07Mar2021&quot;
+
+stringency_filtered &lt;- stringency_data %&gt;%
+  select(CountryCode, RegionCode, RegionName, all_of(date_cols_stringency[which(date_cols_stringency &gt;= start_date &amp; date_cols_stringency &lt;= end_date)]))
+
+containment_filtered &lt;- containment_data %&gt;%
+  select(CountryCode, RegionCode, RegionName, all_of(date_cols_containment[which(date_cols_containment &gt;= start_date &amp; date_cols_containment &lt;= end_date)]))
+
+stringency_long &lt;- stringency_filtered %&gt;%
+  pivot_longer(
+    cols = all_of(date_cols_stringency[which(date_cols_stringency &gt;= start_date &amp; date_cols_stringency &lt;= end_date)]),
+    names_to = &quot;date&quot;,
+    values_to = &quot;StringencyIndex&quot;
+  ) %&gt;%
+  mutate(date = as.Date(date, format = &quot;%d%b%Y&quot;))
+
+containment_long &lt;- containment_filtered %&gt;%
+  pivot_longer(
+    cols = all_of(date_cols_containment[which(date_cols_containment &gt;= start_date &amp; date_cols_containment &lt;= end_date)]),
+    names_to = &quot;date&quot;,
+    values_to = &quot;ContainmentHealthIndex&quot;
+  ) %&gt;%
+  mutate(date = as.Date(date, format = &quot;%d%b%Y&quot;))
+
+indices_long &lt;- stringency_long %&gt;%
+  left_join(containment_long, by = c(&quot;CountryCode&quot;, &quot;RegionCode&quot;, &quot;RegionName&quot;, &quot;date&quot;), relationship=&quot;many-to-many&quot;)</code></pre>
+</div>
+<div id="data-cleaning" class="section level4">
+<h4><strong>Data Cleaning</strong></h4>
+<p>During cleaning, key variables, such as positivity rate and death
+rate, were calculated, and date formats were standardized. Missing data
+was also accounted for in these steps.</p>
+<pre class="r"><code>california_data$positivity_rate &lt;- (california_data$positiveIncrease/california_data$totalTestResultsIncrease) * 100
+
+ohio_data$positivity_rate &lt;- (ohio_data$positiveIncrease / ohio_data$totalTestResultsIncrease) * 100
+
+national_data$positivity_rate &lt;- (national_data$positiveIncrease / national_data$totalTestResultsIncrease) * 100
+
+ohio_population &lt;- 11799448
+california_population &lt;- 39538223
+national_population &lt;- 331449281
+
+california_data$death_rate &lt;- (california_data$death / california_population) * 100000
+
+ohio_data$death_rate &lt;- (ohio_data$death / ohio_population) * 100000
+
+national_data$death_rate &lt;- (national_data$death / national_population) * 100000</code></pre>
+</div>
+<div id="converting-date-columns" class="section level4">
+<h4><strong>Converting Date Columns</strong></h4>
+<p>Date columns in each dataset were reformatted for better
+alignment.</p>
+<pre class="r"><code>california_data$date &lt;- as.Date(california_data$date)
+ohio_data$date &lt;- as.Date(ohio_data$date)
+national_data$date &lt;- as.Date(national_data$date)
+
+range(california_data$date, na.rm = TRUE)
+range(ohio_data$date, na.rm = TRUE)
+range(national_data$date, na.rm = TRUE)</code></pre>
+</div>
+<div id="removing-rows-with-missing-or-implausible-values"
+class="section level4">
+<h4><strong>Removing Rows with Missing or Implausible
+Values</strong></h4>
+<p>Rows with missing or implausible values (positivity rates &gt; 100%)
+were adjusted accordingly.</p>
+<pre class="r"><code>california_filtered &lt;- california_data %&gt;%
+  filter(!is.na(date) &amp; !is.na(positivity_rate))
+
+ohio_filtered &lt;- ohio_data %&gt;%
+  filter(!is.na(date) &amp; !is.na(positivity_rate) &amp; totalTestResultsIncrease &gt; 0) %&gt;%
+  mutate(positiveIncrease = ifelse(positiveIncrease &gt; totalTestResultsIncrease, totalTestResultsIncrease, positiveIncrease)) %&gt;%
+  mutate(positivity_rate = (positiveIncrease / totalTestResultsIncrease) * 100) %&gt;%
+  filter(positivity_rate &lt;= 100)
+
+national_filtered &lt;- national_data %&gt;%
+  filter(!is.na(date) &amp; !is.na(positivity_rate) &amp; totalTestResultsIncrease &gt; 0) %&gt;%
+  mutate(positiveIncrease = ifelse(positiveIncrease &gt; totalTestResultsIncrease, totalTestResultsIncrease, positiveIncrease)) %&gt;%
+  mutate(positivity_rate = (positiveIncrease / totalTestResultsIncrease) * 100) %&gt;%
+  filter(positivity_rate &lt;= 100)</code></pre>
+</div>
+<div id="data-wrangling-and-filtering" class="section level4">
+<h4><strong>Data Wrangling and Filtering</strong></h4>
+<pre class="r"><code>start_date &lt;- as.Date(&quot;2020-03-04&quot;)
+end_date &lt;- as.Date(&quot;2021-03-07&quot;)
+
+national_filtered &lt;- national_filtered %&gt;%
+  filter(date &gt;= start_date &amp; date &lt;= end_date)
+
+california_filtered &lt;- california_filtered %&gt;%
+  filter(date &gt;= start_date &amp; date &lt;= end_date)
+
+ohio_filtered &lt;- ohio_filtered %&gt;%
+  filter(date &gt;= start_date &amp; date &lt;= end_date)</code></pre>
+</div>
+<div id="combining-datasets-for-analysis" class="section level4">
+<h4><strong>Combining Datasets for Analysis</strong></h4>
+<p>Merging each filtered state dataset with OxCGRT indices to compare
+trends in positivity test rate and death rate to response indices.</p>
+<pre class="r"><code>timeseries_filtered &lt;- timeseries_long %&gt;%
+  filter(RegionName %in% c(&quot;California&quot;, &quot;Ohio&quot;, &quot;United States&quot;))
+
+timeseries_filtered$date &lt;- as.Date(timeseries_filtered$Date)
+
+ohio_combined &lt;- ohio_filtered %&gt;%
+  left_join(indices_long %&gt;% filter(RegionName == &quot;Ohio&quot;), by = &quot;date&quot;)
+
+california_combined &lt;- california_filtered %&gt;%
+  left_join(indices_long %&gt;% filter(RegionName == &quot;California&quot;), by = &quot;date&quot;)</code></pre>
+</div>
+<div id="interpolation-of-missing-index-values" class="section level4">
+<h4><strong>Interpolation of Missing Index Values</strong></h4>
+<p>Linear interpolation was used to address missing values from the
+OxCGRT dataset to allow better visualization.</p>
+<pre class="r"><code>california_combined$StringencyIndex &lt;- na.approx(california_combined$StringencyIndex, na.rm = FALSE)
+california_combined$ContainmentHealthIndex &lt;- na.approx(california_combined$ContainmentHealthIndex, na.rm = FALSE)
+
+ohio_combined &lt;- ohio_combined %&gt;%
+  mutate(
+    StringencyIndex = zoo::na.approx(StringencyIndex, na.rm = FALSE),
+    ContainmentHealthIndex = zoo::na.approx(ContainmentHealthIndex, na.rm = FALSE)
+  )</code></pre>
+<p>In summary, the datasets from the COVID Tracking Project, U.S. Census
+Bureau, and OxCGRT were downloaded, cleaned, and merged to analyze
+COVID-19 positivity and death rate trends in Ohio and California. The
+OxCGRT dataset was filtered and extrapolated to include government
+intervention indices to assess the impact of policy on pandemic
+statistics. Although these indices and pandemic statistics are on
+different scales, combining them in one visualization allows for easy
+identification of patterns, such as potential decreases in stringency or
+containment measures following surges in death rates.</p>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<div id="summary-statistics" class="section level3">
+<h3>Summary Statistics</h3>
+<p>Summary of the Average COVID-19 Positivity and Death Rates Across
+Ohio, California, and the Entire United States</p>
+<pre class="r"><code>summary_california &lt;- california_filtered %&gt;%
+  summarise(
+    avg_positivity_rate = mean(positivity_rate, na.rm = TRUE),
+    avg_death_rate = mean(death_rate, na.rm = TRUE))
+
+summary_ohio &lt;- ohio_filtered %&gt;%
+  summarise(avg_positivity_rate = mean(positivity_rate, na.rm=TRUE),
+            avg_death_rate = mean(death_rate, na.rm=TRUE))
+
+summary_national &lt;- national_filtered %&gt;%
+  summarise(avg_positivity_rate = mean(positivity_rate, na.rm=TRUE),
+            avg_death_rate = mean(death_rate, na.rm=TRUE))
+
+summary_table &lt;- rbind(
+  California = summary_california,
+  Ohio = summary_ohio,
+  National = summary_national
+)
+
+kable(
+  summary_table,
+  col.names = c(&quot;Average Positivity Rate (%)&quot;, &quot;Average Death Rate (per 100,000)&quot;),
+  caption = &quot;Table 1: Summary Statistics of COVID-19 Positivity and Death Rates by Region&quot;
+)</code></pre>
+<table>
+<caption>Table 1: Summary Statistics of COVID-19 Positivity and Death
+Rates by Region</caption>
+<colgroup>
+<col width="15%" />
+<col width="38%" />
+<col width="45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Average Positivity Rate (%)</th>
+<th align="right">Average Death Rate (per 100,000)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">California</td>
+<td align="right">11.412588</td>
+<td align="right">40.27808</td>
+</tr>
+<tr class="even">
+<td align="left">Ohio</td>
+<td align="right">8.970802</td>
+<td align="right">45.84663</td>
+</tr>
+<tr class="odd">
+<td align="left">National</td>
+<td align="right">8.346790</td>
+<td align="right">60.00300</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table 1 Analysis</strong>: This table presents the average
+COVID-19 positivity rates and death rates per 100,000 people for
+California, Ohio, and the national average during the pre-vaccine
+period. California overall had the highest positivity rate at 11.4% but
+had an overall lower death rate at 40.28 deaths per 100,000 people. Ohio
+was also higher than the national average for positivity rate at about
+9.0% but had a higher death rate than California but was lower than the
+national average at 45.8 deaths per 100,000 people.</p>
+<div id="positivity-rate-trends-combined" class="section level4">
+<h4><strong>Positivity Rate Trends Combined</strong></h4>
+<p>Plot for comparing the COVID-19 positivity rates between Ohio,
+California, and the entire United States</p>
+<pre class="r"><code>ggplot() +
+  geom_line(data = california_combined, aes(x = date, y = positivity_rate, color = &quot;California&quot;)) +
+  geom_line(data = ohio_combined, aes(x = date, y = positivity_rate, color = &quot;Ohio&quot;)) +
+  geom_line(data = national_filtered, aes(x = date, y = positivity_rate, color = &quot;National&quot;)) +
+  
+  labs(title = &quot;Figure 1: COVID-19 Positivity Rate Trends&quot;,
+       x = &quot;Date&quot;, y = &quot;Positivity Rate (%)&quot;) +
+  
+  scale_color_manual(values = c(&quot;California&quot; = &quot;blue&quot;, &quot;Ohio&quot; = &quot;red&quot;, &quot;National&quot; = &quot;green&quot;),
+                     name = &quot;Region&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Written-Report_files/figure-html/unnamed-chunk-7-1.png" width="960" /></p>
+<p><strong>Figure 1 Analysis:</strong> This figure shows the COVID-19
+positivity rate trends for California, Ohio, and the national average
+from early 2020 to early 2021. Early in the pandemic, both California
+and Ohio displayed high variability in positivity rates, likely due to
+testing availability and early cases. After stabilizing, California’s
+rate was slightly higher than the national average and Ohio’s rate
+during the summer months. Starting around October 2020, California
+remained lower than Ohio and the national average which may be
+attributed to the stricter policies for gatherings during that time
+period.</p>
+</div>
+<div id="death-rate-trends-combined" class="section level4">
+<h4><strong>Death Rate Trends Combined</strong></h4>
+<p>Plot for comparing the COVID-19 death rates between Ohio, California,
+and the entire United States</p>
+<pre class="r"><code>ggplot() +
+  geom_line(data = california_filtered, aes(x = date, y = death_rate, color = &quot;California&quot;)) +
+  geom_line(data = ohio_filtered, aes(x = date, y = death_rate, color = &quot;Ohio&quot;)) +
+  geom_line(data = national_filtered, aes(x = date, y = death_rate, color = &quot;National&quot;)) +
+  labs(title = &quot;Figure 2: COVID-19 Death Rate Trends&quot;,
+       x = &quot;Date&quot;, y = &quot;Death Rate (per 100,000)&quot;) +
+  scale_color_manual(values = c(&quot;California&quot; = &quot;blue&quot;, &quot;Ohio&quot; = &quot;red&quot;, &quot;National&quot; = &quot;green&quot;),
+                     name = &quot;Region&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Written-Report_files/figure-html/unnamed-chunk-8-1.png" width="960" /></p>
+<p><strong>Figure 2 Analysis</strong>: This figure shows the cumulative
+COVID-19 death rates for California, Ohio, and the national average over
+time. Early in the pandemic, death rates rose more gradually in
+California than compared to Ohio and the national average, which may
+reflect the potential impact of its early and stringent policies. By
+late 2020, Ohio and California had similar death rates but then Ohio
+increased more rapidly than California around December 2020. The
+national death rate consistently was higher than both states, which
+highlights the variations in state-level policies and pandemic
+responses. California’s overall lower death rate throughout most of 2020
+suggests that their stringent health measures may have mitigated
+mortality more effectively than Ohio’s moderate approach. This
+difference did not seem to matter during the winter surge as they both
+had similar rates and increases at the time.</p>
+</div>
+<div id="positivity-rate-trends-by-region" class="section level4">
+<h4><strong>Positivity Rate Trends by Region</strong></h4>
+<p>Plots for trends in COVID-19 positivity rates for California and Ohio
+with stringency and containment indices</p>
+<pre class="r"><code>ggplot(ohio_combined) +
+  geom_line(aes(x = date, y = positivity_rate, color = &quot;Positivity Rate&quot;)) +
+  geom_line(aes(x = date, y = StringencyIndex, linetype = &quot;Stringency Index&quot;), color = &quot;blue&quot;, alpha = 0.5) +
+  geom_line(aes(x = date, y = ContainmentHealthIndex, linetype = &quot;Containment Health Index&quot;), color = &quot;blue&quot;, alpha = 0.3) +
+  labs(title = &quot;Figure 3: Ohio COVID-19 Positivity Rate with Response Indices&quot;,
+       x = &quot;Date&quot;, y = &quot;Positivity Rate (%)&quot;,
+       color = &quot;Metric&quot;, linetype = &quot;Index&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Written-Report_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(california_combined) +
+  geom_line(aes(x = date, y = positivity_rate, color = &quot;Positivity Rate&quot;)) +
+  geom_line(aes(x = date, y = StringencyIndex, linetype = &quot;Stringency Index&quot;), color = &quot;blue&quot;, alpha = 0.5) +
+  geom_line(aes(x = date, y = ContainmentHealthIndex, linetype = &quot;Containment Health Index&quot;), color = &quot;blue&quot;, alpha = 0.3) +
+  labs(title = &quot;Figure 4: California COVID-19 Positivity Rate with Response Indices&quot;,
+       x = &quot;Date&quot;, y = &quot;Positivity Rate (%)&quot;,
+       color = &quot;Metric&quot;, linetype = &quot;Index&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Written-Report_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<p><strong>Figure 3 Analysis:</strong> This plot depicts Ohio’s COVID-19
+positivity rate over time in relation to the Stringency Index and
+Containment Health Index. Early in the pandemic, the positivity rate
+showed extreme variability which is likely due to testing availability
+and early case surges. The indices stabilized around mid-2020 and the
+positivity rates showed periodic increases especially during Winter
+2020. The indices, however, did not increase until after high positivity
+rates showing they were more reactive than proactive for
+containment.</p>
+<p><strong>Figure 4</strong> <strong>Analysis:</strong> This figure
+shows California’s COVID-19 positivity rate in relation to the
+Stringency Index and Containment Health Index. Similar to Ohio, the
+positivity rate showed high variability at the start of the pandemic
+likely due to testing availability and early infections. The rate
+eventually remained relatively low until late 2020 similar to Ohio.
+California maintained higher containment and stringency measures
+throughout this period but still had high rates of transmission during
+the winter.</p>
+</div>
+<div id="death-rate-trends-by-region" class="section level4">
+<h4><strong>Death Rate Trends by Region</strong></h4>
+<p>The Stringency Index and Containment Health Index were plotted on the
+same graph as the death rate to explore potential temporal relationships
+between public health interventions and COVID-19 mortality trends. By
+visualizing these measures together, we aim to examine whether increases
+in the death rate were associated with subsequent changes in policy
+stringency or containment efforts.</p>
+<pre class="r"><code>ggplot(ohio_combined) +
+  geom_line(aes(x = date, y = death_rate, color = &quot;Death Rate&quot;)) +
+  geom_line(aes(x = date, y = StringencyIndex, linetype = &quot;Stringency Index&quot;), color = &quot;blue&quot;, alpha = 0.5) +
+  geom_line(aes(x = date, y = ContainmentHealthIndex, linetype = &quot;Containment Health Index&quot;), color = &quot;blue&quot;, alpha = 0.3) +
+  labs(title = &quot;Figure 5: Ohio COVID-19 Death Rate with Response Indices&quot;,
+       x = &quot;Date&quot;, y = &quot;Death Rate (per 100,000)&quot;,
+       color = &quot;Metric&quot;, linetype = &quot;Index&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Written-Report_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(california_combined) +
+  geom_line(aes(x = date, y = death_rate, color = &quot;Death Rate&quot;)) +
+  geom_line(aes(x = date, y = StringencyIndex, linetype = &quot;Stringency Index&quot;), color = &quot;blue&quot;, alpha = 0.5) +
+  geom_line(aes(x = date, y = ContainmentHealthIndex, linetype = &quot;Containment Health Index&quot;), color = &quot;blue&quot;, alpha = 0.3) +
+  labs(title = &quot;Figure 6: California COVID-19 Death Rate with Response Indices&quot;,
+       x = &quot;Date&quot;, y = &quot;Death Rate (per 100,000)&quot;,
+       color = &quot;Metric&quot;, linetype = &quot;Index&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="Written-Report_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<p><strong>Figure 5 Analysis:</strong> The plot shows the trends in
+Ohio’s COVID-19 death rate alongside the Stringency Index and
+Containment Health Index. Overall, the death rate steadily increased
+throughout 2020 with a sharp spike both in Winter 2020 and early 2021.
+The indices fluctuated with a sharp increase at the start of the
+pandemic but declined during the Summer. The indices did not increase
+during the winter suggesting that this approach may have contributed to
+the sharp rise in the death rate during this period.</p>
+<p><strong>Figure 6 Analysis:</strong> This figure highlights
+California’s cumulative COVID-19 death rate alongside the Stringency
+Index and Containment Health Index. The death rate overall rose steadily
+between the start of the pandemic and the summer but had a sharp
+increase during the winter surge in late 2020 and early 2021. California
+had overall high containment and stringency measures throughout 2020
+reflecting its proactive approach. This overall showed limited
+effectiveness during the winter surge, likely due to these
+recommendations not being followed for gatherings. This demonstrates
+that high transmission periods cannot be entirely mitigated without
+broad compliance and vaccines.</p>
+<p><strong>Figures 7 and 8 Analysis:</strong> These figures compare
+COVID-19 death rates in Ohio and California from May to July 2020, a
+time that was transitioning from initial lockdown to reopening, with key
+policy interventions during this period. California opened in May with
+clearer restrictions outlined in Stage 2 “Blueprint for a Safer Economy”
+but then proceeded with indoor closures July 13 due to increased cases.
+This overall led to a lower death rate increase with a slope of 0.1781
+during this time period. Ohio did not implement a mask mandate until
+July 8 but was only necessary for high-risk counties. Finally, Ohio made
+a statewide mask mandate July 23 in response to the rising cases. This
+lax response may explain the higher increase in death rate when compared
+to California as shown by the higher slope of 0.2147 during this time
+period.</p>
+</div>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>This analysis highlights the differences in COVID-19 positivity and
+death rates between California, Ohio, and the national average during
+the pre-vaccine period (March 2020 – April 2021). California’s proactive
+and stringent measures, including early restrictions and consistent
+containment policies, resulted in a lower cumulative death rate (Table
+1) and a more gradual increase in mortality compared to Ohio (Figure 2).
+However, during the winter surge of late 2020, both states experienced
+similar trends in positivity (Figure 1) and death rates (Figure 2),
+underscoring the limitations of public health measures without broad
+compliance and vaccination.</p>
+<p>Ohio’s more reactive approach, with delayed mask mandates and less
+stringent containment policies, corresponded to a higher death rate
+increase during critical periods (Figures 5 and 7). California, despite
+its consistently higher containment and stringency measures (Figures 4
+and 6), faced challenges during periods of high transmission,
+particularly during the summer and winter, as reflected in its initially
+higher positivity rates (Figure 1) and subsequent mortality trends
+(Figure 6). This analysis also revealed that state-level strategies
+likely caused different health outcomes during the same period of time
+(Figures 7 and 8).</p>
+<p>Overall, this analysis underscores the importance of timely and
+sustained public health interventions, as well as the need for broader
+compliance, to effectively mitigate the spread and impact of
+pandemics.</p>
+<p><strong>Future Directions</strong></p>
+<p>Based on this analysis, future analyses could compare California to a
+state with similar population demographics as well as even less
+stringent policies than Ohio, such as Florida. This would provide
+additional insight into how varying levels of government intervention
+influence pandemic outcomes. Statistical modelling could also be done,
+such as regression or time-series analyses, which could quantify the
+associations between stringency measures, positivity rates, and death
+rates.</p>
+</div>
+<div id="references" class="section level1">
+<h1><strong>References</strong></h1>
+<p>“California Orders Additional Restrictions to Slow Transmissions of
+Covid-19.” <em>CDPH</em>, 13 July 2020,
+www.cdph.ca.gov/Programs/OPA/Pages/NR20-158.aspx.</p>
+<p>California, State of. “Governor Newsom Releases Updated Industry
+Guidance.” <em>Governor of California</em>, 7 May 2020,
+www.gov.ca.gov/2020/05/07/governor-newsom-releases-updated-industry-guidance/.</p>
+<p>Dyches, Kiona. “How Did We Get Here: A Look Back at Ohio’s Mask
+Mandates | 10tv.Com.” <em>10tv</em>, 17 Feb. 2022,
+www.10tv.com/article/news/health/coronavirus/how-did-we-get-here-look-back-at-ohios-mask-mandates/530-651a610b-2106-49a2-930a-d0c57f095341.</p>
+<p><em>Governor DeWine Issues Statewide Mask Order, Travel Warning</em>,
+22 July 2020, governor.ohio.gov/.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
