@@ -13,7 +13,7 @@ This project examines the trends in COVID-19 positivity rates and death rates in
 
 # Link to Download Report
 
-[Download Written Report](https://github.com/pcasanas/PM566-final-project/blob/main/Written-Report.pdf)
+[Download Full Written Report](https://github.com/pcasanas/PM566-final-project/blob/main/Written-Report.pdf)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
