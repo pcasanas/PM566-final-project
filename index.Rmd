@@ -9,11 +9,11 @@ output:
 
 # Description
 
-This project examines the trends in COVID-19 positivity rates and death rates in California and Ohio during 2020, prior to the widespread availability of vaccines. The analysis examines how differing government interventions, such as mask mandates and reopening policies, may have influenced public health outcomes including positivity rates and death rates. Data was obtained from the COVID Tracking Project, U.S. Census Bureau, and Oxford COVID-19 Government Response Tracker. This project utilized these databases to provide insights into the effectiveness of each state's pandemic response. The timeline below shows important dates of announcements for policies or mandates with links to articles or websites about them. The graphs show the overall testing rates and death rates which can indicate how the policies may have had effects on these statistics. In the full analysis, Stringency Index and Health Containment Index were used to evaluate how the policies affected the health outcomes.
+This project examines the trends in COVID-19 positivity rates and death rates in California and Ohio during 2020, prior to the widespread availability of vaccines. The analysis examines how differing government interventions, such as mask mandates and reopening policies, may have influenced public health outcomes including positivity rates and death rates. Data was obtained from the COVID Tracking Project, U.S. Census Bureau, and Oxford COVID-19 Government Response Tracker. This project utilized these databases to provide insights into the effectiveness of each state's pandemic response. The graphs show the overall testing rates and death rates which can indicate how the policies may have had effects on these statistics. In the full analysis, Stringency Index and Health Containment Index were used to evaluate how the policies affected the health outcomes.
 
 # Link to Download Report
 
-[Download Written Report](<https://github.com/pcasanas/PM566-final-project/blob/main/Final%20Project.pdf>)
+[Download Written Report](https://github.com/pcasanas/PM566-final-project/blob/main/Final%20Project.pdf)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -169,47 +169,7 @@ ohio_combined <- ohio_combined %>%
   )
 ```
 
-# Figure 1: Timeline of Key COVID-19 Policies in California and Ohio (March - November 2020)
-
-```{r, echo=FALSE, message=FALSE}
-library(timevis)
-
-timeline_data <- data.frame(
-  id = 1:10,
-  content = c(
-    "<a href='https://www.gov.ca.gov/2020/03/19/governor-gavin-newsom-issues-stay-at-home-order/' target='_blank' style='color:blue;'>March 19: CA Stay-at-Home Order</a>",
-    "<a href='https://www.nbcnews.com/news/us-news/california-issues-statewide-stay-home-order-coronavirus-fight-n1164471' target='_blank' style='color:red;'>March 23: OH Stay-at-Home Order</a>",
-    "<a href='https://www.cdph.ca.gov/Programs/OPA/Pages/NR20-158.aspx' target='_blank' style='color:blue;'>May 7: CA Stage 2 Reopening</a>",
-    "<a href='https://coronavirus.ohio.gov/static/responsible/Responsible-Reopening-Retail.pdf' target='_blank' style='color:red;'>May 20: OH Retail Reopens</a>",
-    "<a href='https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/Immunization/ncov2019.aspx' target='_blank' style='color:blue;'>June 18: CA Mask Mandate</a>",
-    "<a href='https://www.10tv.com/article/news/health/coronavirus/how-did-we-get-here-look-back-at-ohios-mask-mandates/530-651a610b-2106-49a2-930a-d0c57f095341' target='_blank' style='color:red;'>July 8: OH County Mask Mandate</a>",
-    "<a href='https://www.cdph.ca.gov/Programs/OPA/Pages/NR20-158.aspx' target='_blank' style='color:blue;'>July 13: CA Indoor Closures</a>",
-    "<a href='https://governor.ohio.gov/media/news-and-media/covid19-update-07222020' target='_blank' style='color:red;'>July 23: OH Statewide Mask Mandate</a>",
-    "<a href='https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/COVID-19/Regional-Stay-Home-Order.aspx' target='_blank' style='color:blue;'>November 19: CA Curfew</a>",
-    "<a href='https://coronavirus.ohio.gov/static/responsible/Restaurants-and-Bars.pdf' target='_blank' style='color:red;'>May 21: OH Reopens Indoor Dining</a>"
-  ),
-  start = c(
-    "2020-03-19", "2020-03-23", "2020-05-07", "2020-05-20", 
-    "2020-06-18", "2020-07-08", "2020-07-13", "2020-07-23", 
-    "2020-11-19", "2020-05-21"
-  )
-)
-
-timevis(
-  timeline_data,
-  options = list(
-    orientation = list(axis = "top", item = "bottom"),
-    zoomable = TRUE
-  )
-)
-
-
-
-```
-
-**Figure 1 Analysis:** This figure shows a timeline of various policies and recommendations made in both Ohio and California. Each leads to a link for an article or website for further details. California seems to precede Ohio when making orders or making recommendations prior to full reopenings.
-
-# Figure 2: Weekly Testing Rates in California and Ohio from March 2020-April 2021
+# Figure 1: Weekly Testing Rates in California and Ohio from March 2020-April 2021
 
 ```{r, echo=FALSE}
 library(dplyr)
@@ -258,9 +218,9 @@ fig
 
 ```
 
-**Figure 2 Analysis:** This figure reveals the amount of weekly COVID-19 tests in both California and Ohio. California overall had more testing and seemed to increase their testing during the winter surge in 2020 and early 2021 whereas Ohio did not see as drastic of a spike.
+**Figure 1 Analysis:** This figure reveals the amount of weekly COVID-19 tests in both California and Ohio. California overall had more testing and seemed to increase their testing during the winter surge in 2020 and early 2021 whereas Ohio did not see as drastic of a spike.
 
-# Figure 3: Weekly Death Rates in California and Ohio from March 2020 - April 2021
+# Figure 2: Weekly Death Rates in California and Ohio from March 2020 - April 2021
 
 ```{r, echo=FALSE}
 library(dplyr)
@@ -311,4 +271,4 @@ death_rate_fig
 
 ```
 
-**Figure 3 Analysis**: This figure shows the death rates in both California and Ohio from March 2020 to April 2021. Ohio at the beginning of the pandemic had a higher death rate, but California was higher during the summer months. The winter surge had an overall higher rate in California likely due to noncompliance of social gatherings during the holidays and greater population density. The early increase of deaths is likely reflective of early lockdown measures and reopening policies.
+**Figure 2 Analysis**: This figure shows the death rates in both California and Ohio from March 2020 to April 2021. Ohio at the beginning of the pandemic had a higher death rate, but California was higher during the summer months. The winter surge had an overall higher rate in California likely due to noncompliance of social gatherings during the holidays and greater population density. The early increase of deaths is likely reflective of early lockdown measures and reopening policies.
