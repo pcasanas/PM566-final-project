@@ -6,5 +6,9 @@ navbar:
       href: index.html
 output:
   html_document:
+<<<<<<< HEAD
     theme: cosmo
 output_dir: "."
+=======
+    theme: cosmo
+>>>>>>> 3fdaf17 (Rendered website)
