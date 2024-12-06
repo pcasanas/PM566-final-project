@@ -2,9 +2,9 @@
 title: "PM566 Final Project"
 author: "Patrick Casanas"
 output: 
-    html_document:
-        toc: TRUE
-        toc_float: TRUE
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 # Description
@@ -32,13 +32,13 @@ library(readxl)
 library(tidyr)
 library(zoo)
 
-california_data <- read.csv("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\california-history.csv")
-ohio_data <- read.csv("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\ohio-history.csv")
-national_data <- read.csv("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\national-history.csv")
+california_data <- read.csv("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-labs\\PM566-final-project\\Data\\california-history.csv")
+ohio_data <- read.csv("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-labs\\PM566-final-project\\Data\\ohio-history.csv")
+national_data <- read.csv("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-labs\\PM566-final-project\\Data\\national-history.csv")
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-timeseries_data <- read_excel("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\OxCGRT_timeseries_all_v1.xlsx")
+timeseries_data <- read_excel("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-labs\\PM566-final-project\\Data\\OxCGRT_timeseries_all_v1.xlsx")
 
 timeseries_long <- timeseries_data %>%
   pivot_longer(
@@ -49,8 +49,8 @@ timeseries_long <- timeseries_data %>%
 
 timeseries_long$Date <- as.Date(timeseries_long$Date, format = "%d%b%Y")
 
-stringency_data <- read_excel("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\OxCGRT_timeseries_all_v1.xlsx", sheet = "StringencyIndex")
-containment_data <- read_excel("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-Project\\Midterm Data\\OxCGRT_timeseries_all_v1.xlsx", sheet = "ContainmentHealthIndex")
+stringency_data <- read_excel("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-labs\\PM566-final-project\\Data\\OxCGRT_timeseries_all_v1.xlsx", sheet = "StringencyIndex")
+containment_data <- read_excel("C:\\Users\\patri\\OneDrive\\Documents\\MPH Sem 3\\Health Data Science\\PM566-labs\\PM566-final-project\\Data\\OxCGRT_timeseries_all_v1.xlsx", sheet = "ContainmentHealthIndex")
 
 date_cols_stringency <- grep("^\\d{2}[A-Za-z]{3}\\d{4}$", colnames(stringency_data), value = TRUE)
 date_cols_containment <- grep("^\\d{2}[A-Za-z]{3}\\d{4}$", colnames(containment_data), value = TRUE)
@@ -271,6 +271,4 @@ death_rate_fig
 
 ```
 
-# **Figure 2 Analysis**: This figure shows the death rates in both California and Ohio from March 2020 to April 2021. Ohio at the beginning of the pandemic had a higher death rate, but California was higher during the summer months. The winter surge had an overall higher rate in California likely due to noncompliance of social gatherings during the holidays and greater population density. The early increase of deaths is likely reflective of early lockdown measures and reopening policies.
-
-This is my PM566 Final Project website.
+**Figure 2 Analysis:** This figure shows the death rates in both California and Ohio from March 2020 to April 2021. Ohio at the beginning of the pandemic had a higher death rate, but California was higher during the summer months. The winter surge had an overall higher rate in California likely due to noncompliance of social gatherings during the holidays and greater population density. The early increase of deaths is likely reflective of early lockdown measures and reopening policies.
