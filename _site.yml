@@ -6,3 +6,5 @@ navbar:
       href: index.html
 output:
   html_document:
+    theme: cosmo
+output_dir: "C:/Users/patri/OneDrive/Documents/MPH Sem 3/Health Data Science/PM566-labs/PM566-final-project"
